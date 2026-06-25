@@ -1,0 +1,25 @@
+{
+  "name": "@cwr/cli",
+  "version": "0.1.0",
+  "description": "Terminal access to the Zama Confidential Token Wrappers Registry: list, show, wrap, unwrap, balance, faucet, snippet.",
+  "license": "BSD-3-Clause-Clear",
+  "type": "module",
+  "bin": {
+    "registry-cli": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "tsx src/index.ts",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@cwr/registry-sdk": "workspace:*",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "tsx": "^4.19.0",
+    "vitest": "^2.1.0"
+  }
+}
