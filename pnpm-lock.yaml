@@ -75,6 +75,9 @@ importers:
       '@cwr/registry-sdk':
         specifier: workspace:*
         version: link:../registry-sdk
+      '@zama-fhe/sdk':
+        specifier: ^3.1.0
+        version: 3.1.0(@tanstack/query-core@5.101.1)(ethers@6.17.0)(viem@2.53.1(typescript@5.9.3)(zod@4.4.3))
       viem:
         specifier: ^2.21.0
         version: 2.53.1(typescript@5.9.3)(zod@4.4.3)
@@ -2303,6 +2306,18 @@ snapshots:
       '@tanstack/query-core': 5.101.1
       ethers: 6.17.0
       viem: 2.53.1(typescript@5.9.3)(zod@3.25.76)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@zama-fhe/sdk@3.1.0(@tanstack/query-core@5.101.1)(ethers@6.17.0)(viem@2.53.1(typescript@5.9.3)(zod@4.4.3))':
+    dependencies:
+      '@zama-fhe/relayer-sdk': 0.4.4
+      zod: 4.4.3
+    optionalDependencies:
+      '@tanstack/query-core': 5.101.1
+      ethers: 6.17.0
+      viem: 2.53.1(typescript@5.9.3)(zod@4.4.3)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
