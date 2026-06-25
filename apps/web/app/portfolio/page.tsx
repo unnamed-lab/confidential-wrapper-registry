@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/ComingSoon";
+import { PortfolioView } from "@/components/PortfolioView";
 
 export default function PortfolioPage() {
-  return <ComingSoon title="Confidential Portfolio" day="Day 6 — batch decryption" />;
+  return <PortfolioView />;
 }
