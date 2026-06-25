@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/ComingSoon";
+import { Faucet } from "@/components/Faucet";
 
 export default function FaucetPage() {
-  return <ComingSoon title="Sepolia Faucet" day="Day 7" />;
+  return <Faucet />;
 }
