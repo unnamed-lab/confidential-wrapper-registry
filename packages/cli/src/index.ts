@@ -6,16 +6,32 @@
  * Write commands (wrap/unwrap/balance/faucet) require the Zama v3 SDK + a signer
  * and are wired here but land on the build schedule (Days 4–7). See .ai/TASKS.md.
  */
-import { createPublicClient, http, isAddress, type Address } from "viem";
+import { createPublicClient, http, isAddress, parseUnits, type Address } from "viem";
 import { mainnet, sepolia } from "viem/chains";
 import {
   readAllPairs,
   enrichPairs,
   generateSnippet,
   getChainAddresses,
+  erc20MetadataAbi,
   type RegistryPair,
   type SnippetFlavor,
 } from "@cwr/registry-sdk";
+import { clientsFor } from "./signer.js";
+import { cliWrap, cliUnwrap, cliBalance } from "./fhe.js";
+
+const mintableAbi = [
+  {
+    type: "function",
+    name: "mint",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+  },
+] as const;
 
 function rpc(chainId: number): string {
   const env =
@@ -86,8 +102,29 @@ async function cmdSnippet(args: string[]): Promise<void> {
   console.log(generateSnippet(p, flavor, { chainId: id }));
 }
 
-function notYet(name: string): void {
-  console.log(`\`${name}\` needs the Zama v3 SDK + a signer — scheduled on the build plan (.ai/TASKS.md).`);
+async function cmdFaucet(args: string[]): Promise<void> {
+  const token = args[0];
+  if (!token || !isAddress(token)) return fail("faucet <token-address> [--amount 1000] [--chain sepolia]");
+  const { id, chain } = resolveChain(flag(args, "chain"));
+  const amount = flag(args, "amount") ?? "1000";
+  const { account, publicClient, walletClient } = clientsFor(id);
+  let decimals = 18;
+  try {
+    decimals = Number(
+      await publicClient.readContract({ address: token, abi: erc20MetadataAbi, functionName: "decimals" }),
+    );
+  } catch {
+    /* default 18 */
+  }
+  const hash = await walletClient.writeContract({
+    address: token,
+    abi: mintableAbi,
+    functionName: "mint",
+    args: [account.address, parseUnits(amount, decimals)],
+    account,
+    chain,
+  });
+  console.log(`minted ${amount} to ${account.address}\ntx: ${hash}`);
 }
 
 function fail(msg: string): void {
@@ -101,10 +138,13 @@ Usage:
   registry-cli list [--chain sepolia|mainnet]
   registry-cli show <token|wrapper> [--chain ...]
   registry-cli snippet <wrapper> [--flavor wagmi|viem|ethers] [--chain ...]
-  registry-cli wrap <wrapper> <amount>     (coming: Day 4)
-  registry-cli unwrap <wrapper> <amount>   (coming: Day 4)
-  registry-cli balance <wrapper>           (coming: Day 5)
-  registry-cli faucet <token>              (coming: Day 7)
+  registry-cli faucet <token> [--amount 1000]   mint a Sepolia cTokenMock
+  registry-cli wrap <wrapper> <amount>           shield public -> confidential
+  registry-cli unwrap <wrapper> <amount>         unshield confidential -> public
+  registry-cli balance <wrapper>                 user-decrypt your balance
+
+Write commands need PRIVATE_KEY (or DEPLOYER_PRIVATE_KEY) set; wrap/unwrap/balance
+also require a funded Sepolia key and hit the Zama relayer.
 `;
 
 async function main(): Promise<void> {
@@ -116,11 +156,23 @@ async function main(): Promise<void> {
       return cmdShow(rest);
     case "snippet":
       return cmdSnippet(rest);
-    case "wrap":
-    case "unwrap":
-    case "balance":
     case "faucet":
-      return notYet(cmd);
+      return cmdFaucet(rest);
+    case "wrap": {
+      const [w, amt] = rest;
+      if (!w || !isAddress(w) || !amt) return fail("wrap <wrapper> <amount> [--chain sepolia]");
+      return cliWrap(resolveChain(flag(rest, "chain")).id, w, amt);
+    }
+    case "unwrap": {
+      const [w, amt] = rest;
+      if (!w || !isAddress(w) || !amt) return fail("unwrap <wrapper> <amount> [--chain sepolia]");
+      return cliUnwrap(resolveChain(flag(rest, "chain")).id, w, amt);
+    }
+    case "balance": {
+      const [w] = rest;
+      if (!w || !isAddress(w)) return fail("balance <wrapper> [--chain sepolia]");
+      return cliBalance(resolveChain(flag(rest, "chain")).id, w);
+    }
     case "help":
     case undefined:
     case "--help":
