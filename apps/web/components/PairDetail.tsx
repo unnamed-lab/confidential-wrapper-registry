@@ -8,6 +8,7 @@ import { usePair } from "@cwr/registry-sdk/react";
 import { StatusBadge } from "./StatusBadge";
 import { SnippetBlock } from "./SnippetBlock";
 import { WrapPanel } from "./WrapPanel";
+import { ConfidentialBalance } from "./ConfidentialBalance";
 import { APP_CHAINS, explorerBase, type AppChainId } from "@/lib/chains";
 
 export function PairDetail({ wrapper }: { wrapper: string }) {
@@ -92,8 +93,9 @@ export function PairDetail({ wrapper }: { wrapper: string }) {
               <h2 className="mb-2 text-sm font-medium text-white/70">Wrap / unwrap</h2>
               <WrapPanel pair={pair} chainId={chainId} />
             </div>
-            <div className="rounded-xl border border-dashed border-white/15 p-6 text-center text-sm text-white/45">
-              Confidential balance + decryption lands on Day 5.
+            <div>
+              <h2 className="mb-2 text-sm font-medium text-white/70">Balance</h2>
+              <ConfidentialBalance pair={pair} chainId={chainId} />
             </div>
           </section>
         </div>
