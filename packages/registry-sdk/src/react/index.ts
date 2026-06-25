@@ -24,3 +24,6 @@ export type HookStatus =
 // Implemented hooks
 export { useRegistryPairs } from "./useRegistryPairs.js";
 export type { UseRegistryPairsArgs } from "./useRegistryPairs.js";
+
+// Re-export core types so the /react entrypoint is self-contained for UI consumers.
+export type { RegistryPair, PairStatus } from "../core/types.js";
