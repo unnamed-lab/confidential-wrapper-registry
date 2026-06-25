@@ -38,3 +38,7 @@ test-results/
 *.log
 npm-debug.log*
 pnpm-debug.log*
+
+# Transient tool artifacts
+*.timestamp-*.mjs
+pnpm-lock.yaml.*
