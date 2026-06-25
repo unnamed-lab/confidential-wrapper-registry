@@ -2,25 +2,17 @@
 
 import { useMemo, useState } from "react";
 import { usePublicClient } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { useRegistryPairs, type RegistryPair } from "@cwr/registry-sdk/react";
 import { StatusBadge } from "./StatusBadge";
-
-const CHAINS = [
-  { id: sepolia.id, label: "Sepolia" },
-  { id: mainnet.id, label: "Mainnet" },
-] as const;
+import { APP_CHAINS, explorerBase, type AppChainId } from "@/lib/chains";
 
 function short(addr: string): string {
   return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
 }
 
-function explorerBase(chainId: number): string {
-  return chainId === mainnet.id ? "https://etherscan.io" : "https://sepolia.etherscan.io";
-}
-
 export function RegistryExplorer() {
-  const [chainId, setChainId] = useState<number>(sepolia.id);
+  const [chainId, setChainId] = useState<AppChainId>(sepolia.id);
   const [query, setQuery] = useState("");
   const client = usePublicClient({ chainId });
 
@@ -58,7 +50,7 @@ export function RegistryExplorer() {
           </p>
         </div>
         <div className="flex items-center gap-2" role="tablist" aria-label="Network">
-          {CHAINS.map((c) => (
+          {APP_CHAINS.map((c) => (
             <button
               key={c.id}
               role="tab"

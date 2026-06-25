@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectWallet } from "./ConnectWallet";
 
 const NAV = [
   { href: "/", label: "Explorer" },
@@ -30,7 +30,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="ml-auto">
-          <ConnectButton showBalance={false} accountStatus="address" chainStatus="icon" />
+          <ConnectWallet />
         </div>
       </div>
     </header>

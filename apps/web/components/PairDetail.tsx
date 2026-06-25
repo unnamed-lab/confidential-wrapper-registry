@@ -3,22 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePublicClient } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { usePair } from "@cwr/registry-sdk/react";
 import { StatusBadge } from "./StatusBadge";
 import { SnippetBlock } from "./SnippetBlock";
-
-const CHAINS = [
-  { id: sepolia.id, label: "Sepolia" },
-  { id: mainnet.id, label: "Mainnet" },
-] as const;
-
-function explorerBase(chainId: number): string {
-  return chainId === mainnet.id ? "https://etherscan.io" : "https://sepolia.etherscan.io";
-}
+import { WrapPanel } from "./WrapPanel";
+import { APP_CHAINS, explorerBase, type AppChainId } from "@/lib/chains";
 
 export function PairDetail({ wrapper }: { wrapper: string }) {
-  const [chainId, setChainId] = useState<number>(sepolia.id);
+  const [chainId, setChainId] = useState<AppChainId>(sepolia.id);
   const client = usePublicClient({ chainId });
   const { pair, isLoading, isError } = usePair({ client, chainId, address: wrapper });
   const base = explorerBase(chainId);
@@ -30,7 +23,7 @@ export function PairDetail({ wrapper }: { wrapper: string }) {
           ← Explorer
         </Link>
         <div className="flex items-center gap-2" role="tablist" aria-label="Network">
-          {CHAINS.map((c) => (
+          {APP_CHAINS.map((c) => (
             <button
               key={c.id}
               role="tab"
@@ -50,7 +43,7 @@ export function PairDetail({ wrapper }: { wrapper: string }) {
 
       {!isLoading && (isError || !pair) && (
         <div className="rounded-xl border border-white/10 p-10 text-center text-white/60">
-          <p>This wrapper isn&apos;t in the registry on {CHAINS.find((c) => c.id === chainId)?.label}.</p>
+          <p>This wrapper isn&apos;t in the registry on {APP_CHAINS.find((c) => c.id === chainId)?.label}.</p>
           <p className="mt-1 text-xs text-white/40">Try switching networks.</p>
         </div>
       )}
@@ -94,8 +87,14 @@ export function PairDetail({ wrapper }: { wrapper: string }) {
             <SnippetBlock pair={pair} chainId={chainId} />
           </section>
 
-          <section className="rounded-xl border border-dashed border-white/15 p-6 text-center text-sm text-white/45">
-            Wrap / unwrap / decrypt panel lands on Day 4–5.
+          <section className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <h2 className="mb-2 text-sm font-medium text-white/70">Wrap / unwrap</h2>
+              <WrapPanel pair={pair} chainId={chainId} />
+            </div>
+            <div className="rounded-xl border border-dashed border-white/15 p-6 text-center text-sm text-white/45">
+              Confidential balance + decryption lands on Day 5.
+            </div>
           </section>
         </div>
       )}

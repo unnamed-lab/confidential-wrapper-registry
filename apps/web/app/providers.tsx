@@ -3,13 +3,13 @@
 import { useState, type ReactNode } from "react";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { ZamaProvider } from "@zama-fhe/react-sdk";
 import { wagmiConfig } from "@/lib/wagmi";
-import "@rainbow-me/rainbowkit/styles.css";
+import { zamaConfig } from "@/lib/zama";
 
 /**
- * App providers. ZamaProvider (FHE) will be added here on Day 4/5 when wrap/decrypt
- * land — the Explorer and registry reads don't need it.
+ * App providers. Order matters: WagmiProvider → QueryClientProvider → ZamaProvider.
+ * ZamaProvider wires the relayer/signer/storage for FHE shield/unshield/decrypt.
  */
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -17,9 +17,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={darkTheme({ accentColor: "#7c5cff", borderRadius: "medium" })}>
-          {children}
-        </RainbowKitProvider>
+        <ZamaProvider config={zamaConfig}>{children}</ZamaProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
