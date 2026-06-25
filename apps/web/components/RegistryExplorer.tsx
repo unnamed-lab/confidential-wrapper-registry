@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { usePublicClient } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import { useRegistryPairs, type RegistryPair } from "@cwr/registry-sdk/react";
@@ -15,7 +15,22 @@ function short(addr: string): string {
 export function RegistryExplorer() {
   const [chainId, setChainId] = useState<AppChainId>(sepolia.id);
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  // duplicate chainId state removed
+  // duplicate query state removed
   const client = usePublicClient({ chainId });
+
+  // Reset query when network changes
+  useEffect(() => {
+    setQuery("");
+    setDebouncedQuery("");
+  }, [chainId]);
+
+  // Debounce query input
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(handler);
+  }, [query]);
 
   const { data: pairs, isLoading, isError, error, refetch, isFetching } = useRegistryPairs({
     client,
@@ -24,7 +39,7 @@ export function RegistryExplorer() {
 
   const filtered = useMemo(() => {
     if (!pairs) return [];
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return pairs;
     return pairs.filter(
       (p) =>
@@ -33,7 +48,7 @@ export function RegistryExplorer() {
         p.token.toLowerCase().includes(q) ||
         p.wrapper.toLowerCase().includes(q),
     );
-  }, [pairs, query]);
+  }, [pairs, debouncedQuery]);
 
   const counts = useMemo(() => {
     const c = { active: 0, revoked: 0, "interface-mismatch": 0 };
