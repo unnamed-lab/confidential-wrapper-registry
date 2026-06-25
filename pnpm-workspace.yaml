@@ -1,7 +1,12 @@
 packages:
   - "apps/*"
   - "packages/*"
-allowBuilds:
-  esbuild: set this to true or false
+# esbuild is required (vitest + tsup) so we build it.
 onlyBuiltDependencies:
   - esbuild
+# Optional native accelerators with pure-JS fallbacks — acknowledged so a fresh
+# `pnpm install --frozen-lockfile` (CI) doesn't fail on unapproved build scripts.
+ignoredBuiltDependencies:
+  - bufferutil
+  - utf-8-validate
+  - keccak
