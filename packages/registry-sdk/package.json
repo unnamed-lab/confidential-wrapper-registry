@@ -1,0 +1,36 @@
+{
+  "name": "@cwr/registry-sdk",
+  "version": "0.1.0",
+  "description": "Typed reader + React hooks + snippet generator for the Zama Confidential Token Wrappers Registry.",
+  "license": "BSD-3-Clause-Clear",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./react": "./src/react/index.ts",
+    "./snippets": "./src/snippets/index.ts",
+    "./abis": "./src/abis/index.ts",
+    "./address-book": "./src/address-book.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5",
+    "react": ">=18",
+    "viem": ">=2"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "@tanstack/react-query": { "optional": true }
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.59.0",
+    "react": "^18.3.1",
+    "viem": "^2.21.0",
+    "vitest": "^2.1.0"
+  }
+}
