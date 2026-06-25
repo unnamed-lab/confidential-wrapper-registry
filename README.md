@@ -4,6 +4,8 @@
 >
 > Submission for the **Zama Developer Program — Mainnet Season 3, Bounty Track**.
 
+**▶ Live app: https://cwrapper.vercel.app**
+
 [![CI](https://github.com/unnamed-lab/confidential-wrapper-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/unnamed-lab/confidential-wrapper-registry/actions/workflows/ci.yml)
 &nbsp;·&nbsp; pnpm monorepo · Next.js 14 · `@zama-fhe/sdk` v3 · wagmi v3 · Foundry · BSD-3-Clause-Clear
 
