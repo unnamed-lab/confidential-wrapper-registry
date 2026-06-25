@@ -8,7 +8,7 @@
     "registry-cli": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "start": "tsx src/index.ts",
     "test": "vitest run --passWithNoTests"
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.0",
+    "tsup": "^8.3.0",
     "tsx": "^4.19.0",
     "vitest": "^2.1.0"
   }

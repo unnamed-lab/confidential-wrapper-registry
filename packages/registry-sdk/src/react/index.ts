@@ -21,5 +21,6 @@ export type HookStatus =
   | "success"
   | "error";
 
-// Hook exports are added as each is implemented. Intentionally empty for now.
-export {};
+// Implemented hooks
+export { useRegistryPairs } from "./useRegistryPairs.js";
+export type { UseRegistryPairsArgs } from "./useRegistryPairs.js";
