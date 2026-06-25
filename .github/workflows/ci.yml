@@ -34,5 +34,5 @@ jobs:
         working-directory: contracts
         run: |
           forge --version
-          forge install foundry-rs/forge-std --no-commit || true
+          forge install foundry-rs/forge-std
           forge test -vvv

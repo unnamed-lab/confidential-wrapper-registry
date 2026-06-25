@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/ComingSoon";
+import { PairDetail } from "@/components/PairDetail";
 
 export default function PairPage({ params }: { params: { wrapper: string } }) {
-  return <ComingSoon title={`Pair ${params.wrapper.slice(0, 10)}…`} day="Day 4 — wrap/unwrap + snippets" />;
+  return <PairDetail wrapper={params.wrapper} />;
 }
