@@ -3,13 +3,14 @@ import type { Address } from "viem";
 /**
  * Single source of truth for on-chain addresses, per chain id.
  *
- * ⚠️ VERIFICATION STATUS (see .ai/VERIFIED-FACTS.md):
- *   - Mainnet registry below is a CANDIDATE from web search — NOT yet confirmed on-chain.
- *   - Sepolia registry + cTokenMock list are PLACEHOLDERS (zero address) pending Day-2
- *     verification from docs.zama.org → Protocol Apps → Registry / addresses page.
+ * ✅ VERIFIED ON-CHAIN 2026-06-25 (packages/cli/scripts/verify-addresses.ts):
+ *   - Both registries respond to our ABI: Sepolia reports 8 pairs, mainnet 9.
+ *   - Every wrapper returns true for supportsInterface(0x4958f2a4).
+ * Source of addresses: docs.zama.org → Protocol Apps → Addresses (testnet/sepolia, mainnet/ethereum).
  *
- * Never trust an address here until its `verified` flag is true. The `scripts/verify-addresses`
- * task (Day 2) reads each registry on-chain and flips these flags.
+ * Note: the pair list itself is read DYNAMICALLY from the registry at runtime (that's the
+ * coverage requirement) — we only pin the registry address, the Sepolia faucet token mocks,
+ * and (after deploy) the FaucetDistributor here.
  */
 
 export const SEPOLIA = 11155111 as const;
@@ -31,15 +32,24 @@ export interface ChainAddresses {
 
 export const ADDRESS_BOOK: Record<SupportedChainId, ChainAddresses> = {
   [SEPOLIA]: {
-    registry: "0x0000000000000000000000000000000000000000",
-    cTokenMocks: [],
-    verified: false,
+    registry: "0x2f0750Bbb0A246059d80e94c454586a7F27a128e",
+    // Underlying mock ERC-20s the faucet should dispense (so users can wrap them).
+    // Mint policy / decimals to confirm on Day 7 before choosing the faucet approach.
+    cTokenMocks: [
+      "0x9b5Cd13b8eFbB58Dc25A05CF411D8056058aDFfF", // USDCMock
+      "0xa7dA08FafDC9097Cc0E7D4f113A61e31d7e8e9b0", // USDTMock
+      "0xff54739b16576FA5402F211D0b938469Ab9A5f3F", // WETHMock
+      "0xFf021fB13cA64e5354c62c954b949a88cfDEb25E", // BRONMock
+      "0x75355a85c6FB9df5f0C80FF54e8747EEe9a0BF57", // ZAMAMock
+      "0x93c931278A2aad1916783F952f94276eA5111442", // tGBPMock
+      "0x24377AE4AA0C45ecEe71225007f17c5D423dd940", // XAUtMock
+    ],
+    verified: true,
   },
   [MAINNET]: {
-    // CANDIDATE — confirm on-chain before shipping.
     registry: "0xeb5015fF021DB115aCe010f23F55C2591059bBA0",
-    cTokenMocks: [],
-    verified: false,
+    cTokenMocks: [], // no faucet on mainnet
+    verified: true,
   },
 };
 
