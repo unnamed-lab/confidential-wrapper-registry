@@ -3,22 +3,153 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 html {
-  background: #0b0d12;
+  background: #030408;
   color: #e6e8ee;
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
   font-feature-settings: "tnum" 1;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Custom Cyber Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060813;
+}
+::-webkit-scrollbar-thumb {
+  background: #25283c;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7c5cff;
+  box-shadow: 0 0 8px #7c5cff;
+}
+
+/* Cyber Ambient Grids & Spotlights */
+.cyber-bg-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -10;
+  background-color: #030408;
+}
+
+.cyber-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(124, 92, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 92, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center top;
+  mask-image: radial-gradient(circle at 50% 30%, black 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at 50% 30%, black 30%, transparent 85%);
+}
+
+.cyber-glow-top {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1400px;
+  height: 600px;
+  background: radial-gradient(circle at center, rgba(124, 92, 255, 0.15) 0%, rgba(0, 240, 255, 0.05) 45%, transparent 70%);
+  filter: blur(100px);
+  z-index: -9;
+}
+
+.cyber-glow-right {
+  position: absolute;
+  top: 40%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(188, 0, 221, 0.06) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: -9;
+}
+
+.cyber-glow-left {
+  position: absolute;
+  bottom: 10%;
+  left: -10%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.04) 0%, transparent 70%);
+  filter: blur(120px);
+  z-index: -9;
+}
+
+/* Glassmorphism Panel styles */
+.glass-panel {
+  background: rgba(10, 11, 20, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(124, 92, 255, 0.25);
+  background: rgba(10, 11, 20, 0.55);
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(124, 92, 255, 0.08),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Cyber text effects */
+.cyber-text-glow {
+  text-shadow: 0 0 12px rgba(124, 92, 255, 0.4);
+}
+
+.cyber-text-glow-cyan {
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+/* Blinking dot animations for Status Badges */
+@keyframes blink-green {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 8px 2px rgba(16, 185, 129, 0.5); }
+}
+
+@keyframes breathe-red {
+  0%, 100% { opacity: 0.5; box-shadow: 0 0 2px rgba(239, 68, 68, 0.2); }
+  50% { opacity: 1; box-shadow: 0 0 12px 3px rgba(239, 68, 68, 0.6); }
+}
+
+.animate-blink-green {
+  animation: blink-green 2s infinite ease-in-out;
+}
+
+.animate-breathe-red {
+  animation: breathe-red 2.5s infinite ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+  .animate-blink-green, .animate-breathe-red {
+    animation: none !important;
   }
 }

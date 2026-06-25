@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Space_Grotesk, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { SiteHeader } from "@/components/SiteHeader";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Confidential Wrapper Registry",
@@ -13,10 +26,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className="antialiased">
+      <body className={`${spaceGrotesk.variable} ${outfit.variable} antialiased font-outfit`}>
+        <div className="cyber-bg-overlay">
+          <div className="cyber-grid" />
+          <div className="cyber-glow-top" />
+          <div className="cyber-glow-right" />
+          <div className="cyber-glow-left" />
+        </div>
         <Providers>
           <SiteHeader />
-          <main className="mx-auto w-full max-w-6xl px-4 py-8">{children}</main>
+          <main className="relative mx-auto w-full max-w-6xl px-4 py-8 pb-24 sm:pb-8 z-1">{children}</main>
         </Providers>
       </body>
     </html>
