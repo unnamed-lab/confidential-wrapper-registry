@@ -26,9 +26,14 @@ export { useRegistryPairs } from "./useRegistryPairs.js";
 export type { UseRegistryPairsArgs } from "./useRegistryPairs.js";
 export { usePair } from "./usePair.js";
 export type { UsePairArgs, UsePairResult } from "./usePair.js";
+export { useRegistryEvents } from "./useRegistryEvents.js";
+export type { UseRegistryEventsArgs } from "./useRegistryEvents.js";
 
 // Re-export core types so the /react entrypoint is self-contained for UI consumers.
 export type { RegistryPair, PairStatus } from "../core/types.js";
+export { detectAnomalies } from "../core/anomalies.js";
+export type { Anomaly, AnomalyKind, AnomalySeverity } from "../core/anomalies.js";
+export type { RegistryEvent, RegistryEventType } from "../core/events.js";
 
 // Re-export the snippet generator so UI code imports everything from one entrypoint.
 export { generateSnippet } from "../snippets/index.js";
